@@ -35,8 +35,19 @@ if 'database_pasar' not in st.session_state:
 # HALAMAN 1: LANDING PAGE & FORM LOGIN
 # ==========================================
 def halaman_login():
-    # --- BAGIAN 0: NAVIGATION BAR (NAVBAR BACKGROUND HIJAU) ---
+# --- BAGIAN 0: NAVIGATION BAR (NAVBAR BACKGROUND HIJAU MENTOK ATAS) ---
     st.markdown("""
+        <style>
+        /* 1. Menghilangkan ruang kosong (padding) di paling atas layar */
+        .block-container {
+            padding-top: 0rem !important;
+        }
+        /* 2. Menghapus / menyembunyikan header putih bawaan Streamlit */
+        header {
+            visibility: hidden !important;
+        }
+        </style>
+        
         <div style="
             background-color: #2e7d32; 
             padding: 15px 50px; 
@@ -46,7 +57,7 @@ def halaman_login():
             right: 50%; 
             margin-left: -50vw; 
             margin-right: -50vw; 
-            margin-top: -60px; 
+            margin-top: -50px; /* Menarik navbar ke posisi paling mentok */
             display: flex; 
             justify-content: space-between; 
             align-items: center;
