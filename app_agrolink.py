@@ -35,10 +35,10 @@ if 'database_pasar' not in st.session_state:
 # HALAMAN 1: LANDING PAGE & FORM LOGIN
 # ==========================================
 def halaman_login():
-    # --- BAGIAN 0: NAVIGATION BAR (MENU ATAS) ---
+    # --- BAGIAN 0: NAVIGATION BAR (NAVBAR BACKGROUND HIJAU) ---
     st.markdown("""
         <div style="
-            background-color: white; 
+            background-color: #2e7d32; 
             padding: 15px 50px; 
             width: 100vw; 
             position: relative; 
@@ -46,71 +46,86 @@ def halaman_login():
             right: 50%; 
             margin-left: -50vw; 
             margin-right: -50vw; 
-            margin-top: -60px; /* Menarik menu ke paling atas layar */
-            margin-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
+            margin-top: -60px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
         ">
-            <div style="font-weight: 800; font-size: 20px; color: #2e7d32; letter-spacing: 1px;">🌾 AGRO-LINK</div>
+            <div style="font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px;">🌾 AGRO-LINK</div>
             <div style="font-size: 15px;">
-                <span style="color: #2e7d32; margin-left: 20px; font-weight: 700; cursor: pointer;">Beranda</span>
-                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Tentang Kami</span>
-                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Fitur</span>
-                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Kontak</span>
+                <span style="color: white; margin-left: 20px; font-weight: 700; cursor: pointer; border-bottom: 2px solid white; padding-bottom: 2px;">Beranda</span>
+                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Tentang Kami</span>
+                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Fitur</span>
+                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Kontak</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
 
-   # --- BAGIAN 1: HERO SECTION (FULL WIDTH BANNER) ---
+    # --- BAGIAN 1: HERO SECTION (JUDUL BACKGROUND PUTIH) ---
     st.markdown("""
         <style>
-        /* Mencegah munculnya scrollbar horizontal ke kiri-kanan */
         .block-container { overflow-x: hidden; }
         </style>
         
         <div style="
-            background-color: #2e7d32; 
-            padding: 50px 20px; 
-            margin-bottom: 30px; 
+            background-color: white; 
+            padding: 60px 20px 40px 20px; 
             width: 100vw; 
             position: relative; 
             left: 50%; 
             right: 50%; 
             margin-left: -50vw; 
             margin-right: -50vw; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         ">
-            <h1 style='text-align: center; color: white; margin-bottom: 5px;'>🌾 AGRO-LINK BATANG</h1>
-            <h4 style='text-align: center; color: #e8f5e9; margin-top: 0; font-weight: normal;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>
+            <h1 style='text-align: center; color: #2e7d32; font-size: 45px; margin-bottom: 10px;'>🌾 AGRO-LINK BATANG</h1>
+            <h4 style='text-align: center; color: #555; margin-top: 0; font-weight: normal;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>
         </div>
     """, unsafe_allow_html=True)
-    
-    # --- BAGIAN 2: PENJELASAN APLIKASI ---
-    col_teks, col_fitur = st.columns(2)
-    
-    with col_teks:
-        st.write("### 🌍 Apa itu AGRO-LINK?")
-        st.write("AGRO-LINK BATANG adalah platform inovatif yang dirancang untuk menjembatani kesenjangan informasi antara **Petani** dan **Pedagang Pasar** di Kabupaten Batang.")
-        st.info("💡 **Misi Kami:** Menghilangkan risiko gagal panen akibat salah pilih tanaman, dan memastikan petani mendapatkan harga jual terbaik langsung dari pembeli.")
-        
-    with col_fitur:
-        st.write("### ✨ Fitur Unggulan")
-        st.write("🤖 **Kecerdasan Buatan (AI):** Analisis kondisi tanah (N, P, K, pH) dan cuaca untuk merekomendasikan tanaman paling optimal.")
-        st.write("📈 **Pantauan Pasar Terbuka:** Petani bisa melihat harga beli dan kebutuhan stok dari pasar-pasar di Batang secara *real-time*.")
-        st.write("🤝 **Koneksi Langsung:** Dilengkapi kontak WhatsApp untuk transaksi langsung antara petani dan tengkulak.")
 
-    st.markdown("---")
-    
+# --- BAGIAN 2: PENJELASAN APLIKASI (BACKGROUND HIJAU FULL) ---
+    st.markdown("""
+    <div style="background-color: #2e7d32; padding: 60px 10%; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; color: white; margin-bottom: 40px; box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);">
+        <h2 style='text-align: center; color: white; margin-bottom: 30px;'>🌍 Mengapa AGRO-LINK Hadir di Batang?</h2>
+        <div style="display: flex; gap: 20px; margin-bottom: 50px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 250px; background-color: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; border-left: 6px solid #ff5252;">
+                <h4 style="margin-top: 0; color: #ffeb3b;">📉 Masalah Saat Ini:</h4>
+                <p style="font-size: 15px; margin-bottom: 0;">Petani Batang sering mengalami kerugian akibat salah prediksi komoditas tanam dan harga jual yang anjlok karena rantai distribusi yang panjang (permainan tengkulak).</p>
+            </div>
+            <div style="flex: 1; min-width: 250px; background-color: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; border-left: 6px solid #69f0ae;">
+                <h4 style="margin-top: 0; color: #69f0ae;">📈 Solusi AGRO-LINK:</h4>
+                <p style="font-size: 15px; margin-bottom: 0;">Memberikan rekomendasi tanam presisi berbasis AI dan membuka transparansi harga pasar agar petani mendapatkan keuntungan finansial yang maksimal.</p>
+            </div>
+        </div>
+        <h3 style='text-align: center; color: white; margin-bottom: 25px;'>✨ Tiga Pilar Utama Inovasi Kami</h3>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; text-align: center;">
+            <div style="flex: 1; min-width: 200px; background-color: white; color: #333; padding: 25px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                <h1 style="margin:0; font-size: 45px;">🤖</h1>
+                <h4 style="color: #2e7d32; margin-bottom: 10px;">Smart Farming AI</h4>
+                <p style="font-size: 14px; margin: 0; color: #555;">Analisis cerdas kondisi tanah dan cuaca untuk rekomendasi tanaman paling kebal & menguntungkan.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background-color: white; color: #333; padding: 25px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                <h1 style="margin:0; font-size: 45px;">📊</h1>
+                <h4 style="color: #2e7d32; margin-bottom: 10px;">Transparansi Pasar</h4>
+                <p style="font-size: 14px; margin: 0; color: #555;">Pantauan harga beli dan kebutuhan stok riil dari berbagai pasar di Batang secara terbuka.</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background-color: white; color: #333; padding: 25px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                <h1 style="margin:0; font-size: 45px;">🤝</h1>
+                <h4 style="color: #2e7d32; margin-bottom: 10px;">Potong Rantai Pasok</h4>
+                <p style="font-size: 14px; margin: 0; color: #555;">Fitur kontak WhatsApp untuk negosiasi langsung antara petani dan pedagang pasar.</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
     # --- BAGIAN 3: FORM LOGIN ---
     st.write("<h3 style='text-align: center;'>🚀 Masuk ke Ekosistem</h3>", unsafe_allow_html=True)
     st.write("<p style='text-align: center;'>Silakan pilih peran Anda untuk memulai.</p>", unsafe_allow_html=True)
     
     col_kiri, col_tengah, col_kanan = st.columns([1, 2, 1])
     with col_tengah:
-        with st.container(border=True): # Memberikan bingkai kotak agar form login terlihat rapi
+        with st.container(border=True):
             peran_input = st.radio("Masuk Sebagai:", ["Pilih Peran...", "👨‍🌾 Petani", "🛒 Penjual (Pedagang Pasar)"])
             
             if peran_input != "Pilih Peran...":
