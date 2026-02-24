@@ -109,7 +109,7 @@ def halaman_login():
                 <p style="font-size: 15px; margin-bottom: 0;">Memberikan rekomendasi tanam presisi berbasis AI dan membuka transparansi harga pasar agar petani mendapatkan keuntungan finansial yang maksimal.</p>
             </div>
         </div>
-        <h3 style='text-align: center; color: white; margin-bottom: 25px;'>✨ Tiga Pilar Utama Inovasi Kami</h3>
+        <h3 style='text-align: center; color: white; margin-bottom: 25px;'>Tiga Pilar Utama Inovasi Kami</h3>
         <div style="display: flex; gap: 20px; flex-wrap: wrap; text-align: center;">
             <div style="flex: 1; min-width: 200px; background-color: white; color: #333; padding: 25px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
                 <h1 style="margin:0; font-size: 45px;">🤖</h1>
@@ -131,7 +131,7 @@ def halaman_login():
     """, unsafe_allow_html=True)
 
     # --- BAGIAN 3: FORM LOGIN ---
-    st.write("<h3 style='text-align: center;'>🚀 Masuk ke Ekosistem</h3>", unsafe_allow_html=True)
+    st.write("<h3 style='text-align: center;'>Masuk ke Ekosistem</h3>", unsafe_allow_html=True)
     st.write("<p style='text-align: center;'>Silakan pilih peran Anda untuk memulai.</p>", unsafe_allow_html=True)
     
     col_kiri, col_tengah, col_kanan = st.columns([1, 2, 1])
@@ -152,7 +152,7 @@ def halaman_login():
                     pasar = ["Pilih Pasar...", "Pasar Induk Kabupaten Batang", "Pasar Limpung", "Pasar Bandar", "Pasar Bawang", "Pasar Subah", "Pasar Tersono"]
                     lokasi_input = st.selectbox("Lokasi Pasar*:", pasar)
                 
-                if st.button("Masuk ke Dashboard 🚀", type="primary", use_container_width=True):
+                if st.button("Masuk ke Dashboard", type="primary", use_container_width=True):
                     if len(nik_input) != 16 or not nik_input.isdigit():
                         st.error("⚠️ Gagal: NIK harus berupa tepat 16 digit angka!")
                     elif nama_input == "" or hp_input == "" or "Pilih" in lokasi_input:
