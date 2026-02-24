@@ -35,10 +35,58 @@ if 'database_pasar' not in st.session_state:
 # HALAMAN 1: LANDING PAGE & FORM LOGIN
 # ==========================================
 def halaman_login():
-    # --- BAGIAN 1: HERO SECTION (HEADER) ---
-    st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🌾 AGRO-LINK BATANG</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>", unsafe_allow_html=True)
-    st.markdown("---")
+    # --- BAGIAN 0: NAVIGATION BAR (MENU ATAS) ---
+    st.markdown("""
+        <div style="
+            background-color: white; 
+            padding: 15px 50px; 
+            width: 100vw; 
+            position: relative; 
+            left: 50%; 
+            right: 50%; 
+            margin-left: -50vw; 
+            margin-right: -50vw; 
+            margin-top: -60px; /* Menarik menu ke paling atas layar */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        ">
+            <div style="font-weight: 800; font-size: 20px; color: #2e7d32; letter-spacing: 1px;">🌾 AGRO-LINK</div>
+            <div style="font-size: 15px;">
+                <span style="color: #2e7d32; margin-left: 20px; font-weight: 700; cursor: pointer;">Beranda</span>
+                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Tentang Kami</span>
+                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Fitur</span>
+                <span style="color: #666; margin-left: 20px; font-weight: 600; cursor: pointer;">Kontak</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+   # --- BAGIAN 1: HERO SECTION (FULL WIDTH BANNER) ---
+    st.markdown("""
+        <style>
+        /* Mencegah munculnya scrollbar horizontal ke kiri-kanan */
+        .block-container { overflow-x: hidden; }
+        </style>
+        
+        <div style="
+            background-color: #2e7d32; 
+            padding: 50px 20px; 
+            margin-bottom: 30px; 
+            width: 100vw; 
+            position: relative; 
+            left: 50%; 
+            right: 50%; 
+            margin-left: -50vw; 
+            margin-right: -50vw; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        ">
+            <h1 style='text-align: center; color: white; margin-bottom: 5px;'>🌾 AGRO-LINK BATANG</h1>
+            <h4 style='text-align: center; color: #e8f5e9; margin-top: 0; font-weight: normal;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>
+        </div>
+    """, unsafe_allow_html=True)
     
     # --- BAGIAN 2: PENJELASAN APLIKASI ---
     col_teks, col_fitur = st.columns(2)
@@ -98,7 +146,18 @@ def halaman_login():
 def dashboard_petani():
     model_agrolink = joblib.load('model_cerdas_agrolink.joblib')
 
-    st.sidebar.success(f"👋 Halo, Bapak/Ibu **{st.session_state['nama_user']}**!")
+    st.sidebar.markdown(f"""
+        <div style="
+            background-color: #2e7d32; 
+            padding: 15px; 
+            border-radius: 10px; 
+            color: white; 
+            margin-bottom: 15px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        ">
+            <span style="font-size: 18px;">👋</span> Halo, Bapak/Ibu <br><b>{st.session_state['nama_user']}</b>!
+        </div>
+    """, unsafe_allow_html=True)
     st.sidebar.write(f"📍 Lahan: **Kec. {st.session_state['lokasi']}**")
     st.sidebar.write(f"📞 Kontak: **{st.session_state['no_hp']}**")
     st.sidebar.markdown("---")
@@ -121,7 +180,7 @@ def dashboard_petani():
     st.write(f"Rekomendasi tanam cerdas untuk wilayah **{st.session_state['lokasi']}**.")
     st.markdown("---")
 
-    if st.button("Analisis Lahan Sekarang 🚀"):
+    if st.button("Analisis Lahan Sekarang 🚀", type="primary", use_container_width=True):
         rekomendasi = model_agrolink.predict([[n, p, k, suhu, kelembapan, ph, hujan]])
         hasil_inggris = rekomendasi[0].lower() 
         
@@ -217,3 +276,38 @@ elif st.session_state['peran'] == "👨‍🌾 Petani":
     dashboard_petani()
 elif st.session_state['peran'] == "🛒 Penjual (Pedagang Pasar)":
     dashboard_penjual()
+
+# ==========================================
+# FOOTER APLIKASI (FULL WIDTH & MENTOK BAWAH)
+# ==========================================
+st.markdown("<br><br>", unsafe_allow_html=True) 
+st.markdown("""
+    <style>
+    /* 1. Menghilangkan watermark bawaan Streamlit di paling bawah */
+    footer {visibility: hidden;}
+    
+    /* 2. Menghapus ruang kosong (padding) bawaan Streamlit di dasar layar */
+    .block-container {
+        padding-bottom: 0px !important;
+    }
+    </style>
+    
+    <div style="
+        background-color: #1b5e20; 
+        padding: 40px 20px 60px 20px; /* Padding bawah diperbesar agar tebal ke dasar */
+        text-align: center; 
+        color: white; 
+        margin-top: 40px;
+        width: 100vw; 
+        position: relative; 
+        left: 50%; 
+        right: 50%; 
+        margin-left: -50vw; 
+        margin-right: -50vw;
+        margin-bottom: -100px; /* Sihir untuk menarik kotak menembus batas bawah */
+    ">
+        <p style="margin: 0; font-size: 15px; font-weight: bold;">© 2026 AGRO-LINK BATANG</p>
+        <p style="margin: 5px 0; font-size: 14px; color: #c8e6c9;">Mewujudkan Ekosistem Pertanian Digital yang Cerdas dan Transparan.</p>
+        <p style="margin: 0; font-size: 12px; color: #a5d6a7;"><i>Dikembangkan oleh Mahasiswa Institut Widya Pratama untuk KRENOVA Kabupaten Batang 2026</i></p>
+    </div>
+""", unsafe_allow_html=True)
