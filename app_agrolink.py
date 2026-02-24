@@ -136,18 +136,23 @@ def dashboard_petani():
     st.write("### 📊 Pantauan Harga Pasar di Kabupaten Batang")
     st.info("Arahkan kursor Anda ke diagram batang di bawah ini untuk melihat detail harga per pasar.")
     
+    # MEMBUAT GRAFIK INTERAKTIF PLOTLY (VERSI MOBILE-FRIENDLY)
     if not st.session_state['database_pasar'].empty:
         df = st.session_state['database_pasar']
-        fig = px.bar(df, x="Komoditas", y="Harga Beli/Kg (Rp)", color="Pasar", barmode="group",
-                     title="Perbandingan Harga Beli Komoditas Tertinggi Saat Ini",
+        
+        # KUNCI SIHIR: Sumbu X dan Y ditukar posisinya, dan ditambah orientation='h'
+        fig = px.bar(df, x="Harga Beli/Kg (Rp)", y="Komoditas", color="Pasar", barmode="group",
+                     orientation='h', # <-- Membuat batang memanjang ke samping
+                     title="Perbandingan Harga Beli Tertinggi",
                      text_auto='.2s')
+                     
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
         
-        # --- PERBAIKAN UNTUK LAYAR MOBILE ---
-        fig.update_layout(width=800) # Memaksa lebar grafik menjadi 800 piksel
+        # Menambah tinggi grafik agar batang tidak berdempetan saat datanya banyak
+        fig.update_layout(height=500) 
         
-        # Mengubah use_container_width menjadi False agar tidak dipaksa mengecil
-        st.plotly_chart(fig, use_container_width=False)
+        # Kita kembalikan ke True agar otomatis mulus di HP maupun Laptop
+        st.plotly_chart(fig, use_container_width=True)
         
         with st.expander("Klik di sini untuk melihat Tabel Detail Harga"):
             st.dataframe(df, use_container_width=True)
