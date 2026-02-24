@@ -1,7 +1,7 @@
 import streamlit as st
 import joblib
 import pandas as pd
-import plotly.express as px # <-- Ini alat sihir visual interaktifnya!
+import plotly.express as px
 
 # 1. Mengatur Judul Tab Browser
 st.set_page_config(page_title="AGRO-LINK BATANG", page_icon="🌾", layout="wide")
@@ -15,12 +15,15 @@ if 'peran' not in st.session_state:
     st.session_state['peran'] = ""
 if 'lokasi' not in st.session_state:
     st.session_state['lokasi'] = ""
+if 'no_hp' not in st.session_state:
+    st.session_state['no_hp'] = ""
 
-# TRIK PRESENTASI: Mengisi data awal agar grafik tidak kosong saat didemokan ke Juri
+# TRIK PRESENTASI: Data awal sudah ditambah kolom "Nomor WA"
 if 'database_pasar' not in st.session_state:
     data_awal = {
         "Pasar": ["Pasar Limpung", "Pasar Induk Kabupaten Batang", "Pasar Bawang", "Pasar Bandar"],
         "Pedagang": ["Haji Somad", "Bu Tejo", "Pak Slamet", "Koh Ahong"],
+        "Nomor WA": ["081234567890", "081987654321", "085612341234", "082199998888"],
         "Komoditas": ["Padi / Beras", "Kopi", "Jagung", "Kacang Merah"],
         "Harga Beli/Kg (Rp)": [12500, 35000, 8000, 22000],
         "Stok Tersedia (Kg)": [500, 150, 800, 300]
@@ -29,7 +32,7 @@ if 'database_pasar' not in st.session_state:
 
 
 # ==========================================
-# HALAMAN 1: FORM LOGIN (Dengan Validasi NIK)
+# HALAMAN 1: FORM LOGIN
 # ==========================================
 def halaman_login():
     st.title("🌾 Masuk ke Ekosistem AGRO-LINK BATANG")
@@ -46,8 +49,9 @@ def halaman_login():
             
             st.markdown("<p style='text-align: center;'>— ATAU DAFTAR MANUAL —</p>", unsafe_allow_html=True)
             
-            nik_input = st.text_input("Nomor Induk Kependudukan (NIK)*", placeholder="Masukkan 16 digit angka NIK", max_chars=16)
+            nik_input = st.text_input("Nomor Induk Kependudukan (NIK)*", placeholder="Masukkan 16 digit angka", max_chars=16)
             nama_input = st.text_input("Nama Lengkap*")
+            hp_input = st.text_input("Nomor HP / WhatsApp*", placeholder="Contoh: 081234567890") # FITUR BARU
             
             if peran_input == "👨‍🌾 Petani":
                 kecamatan = ["Pilih Kecamatan...", "Bandar", "Bawang", "Blado", "Batang Kota", "Gringsing", "Limpung", "Pecalungan", "Reban", "Subah", "Tersono", "Tulis", "Warungasem"]
@@ -59,24 +63,26 @@ def halaman_login():
             if st.button("Masuk ke Dashboard 🚀", type="primary", use_container_width=True):
                 if len(nik_input) != 16 or not nik_input.isdigit():
                     st.error("⚠️ Gagal: NIK harus berupa tepat 16 digit angka!")
-                elif nama_input == "" or "Pilih" in lokasi_input:
-                    st.error("⚠️ Gagal: Pastikan Nama dan Lokasi sudah terisi!")
+                elif nama_input == "" or hp_input == "" or "Pilih" in lokasi_input:
+                    st.error("⚠️ Gagal: Pastikan Nama, Nomor HP, dan Lokasi sudah terisi!")
                 else:
                     st.session_state['sudah_login'] = True
                     st.session_state['nama_user'] = nama_input
                     st.session_state['peran'] = peran_input
                     st.session_state['lokasi'] = lokasi_input
+                    st.session_state['no_hp'] = hp_input # Menyimpan Nomor HP
                     st.rerun()
 
 
 # ==========================================
-# HALAMAN 2: DASHBOARD PETANI (AI + Grafik Pasar + Terjemahan)
+# HALAMAN 2: DASHBOARD PETANI
 # ==========================================
 def dashboard_petani():
     model_agrolink = joblib.load('model_cerdas_agrolink.joblib')
 
     st.sidebar.success(f"👋 Halo, Bapak/Ibu **{st.session_state['nama_user']}**!")
-    st.sidebar.write(f"📍 Area Lahan: **Kec. {st.session_state['lokasi']}**")
+    st.sidebar.write(f"📍 Lahan: **Kec. {st.session_state['lokasi']}**")
+    st.sidebar.write(f"📞 Kontak: **{st.session_state['no_hp']}**")
     st.sidebar.markdown("---")
     
     st.sidebar.header("⚙️ Sensor Lahan (Input)")
@@ -101,32 +107,14 @@ def dashboard_petani():
         rekomendasi = model_agrolink.predict([[n, p, k, suhu, kelembapan, ph, hujan]])
         hasil_inggris = rekomendasi[0].lower() 
         
-        # --- KAMUS PENERJEMAH OTOMATIS (KOMPLIT 22 TANAMAN) ---
         kamus_tanaman = {
-            "rice": "PADI / BERAS",
-            "maize": "JAGUNG",
-            "kidneybeans": "KACANG MERAH",
-            "coffee": "KOPI",
-            "orange": "JERUK",
-            "apple": "APEL",
-            "watermelon": "SEMANGKA",
-            "banana": "PISANG",
-            "grapes": "ANGGUR",
-            "mango": "MANGGA",
-            "cotton": "KAPAS",
-            "mothbeans": "KACANG MOTH",
-            "mungbean": "KACANG HIJAU",
-            "blackgram": "KACANG HITAM",
-            "lentil": "LENTIL",
-            "pomegranate": "DELIMA",
-            "papaya": "PEPAYA",
-            "coconut": "KELAPA",
-            "jute": "GONI",
-            "chickpea": "KACANG ARAB",
-            "pigeonpeas": "KACANG GUDE",
-            "muskmelon": "BLEWAH"
+            "rice": "PADI / BERAS", "maize": "JAGUNG", "kidneybeans": "KACANG MERAH",
+            "coffee": "KOPI", "orange": "JERUK", "apple": "APEL", "watermelon": "SEMANGKA",
+            "banana": "PISANG", "grapes": "ANGGUR", "mango": "MANGGA", "cotton": "KAPAS",
+            "mothbeans": "KACANG MOTH", "mungbean": "KACANG HIJAU", "blackgram": "KACANG HITAM",
+            "lentil": "LENTIL", "pomegranate": "DELIMA", "papaya": "PEPAYA", "coconut": "KELAPA",
+            "jute": "GONI", "chickpea": "KACANG ARAB", "pigeonpeas": "KACANG GUDE", "muskmelon": "BLEWAH"
         }
-        
         hasil_indonesia = kamus_tanaman.get(hasil_inggris, hasil_inggris.upper())
         
         st.success(f"🌟 Tanaman yang Paling Direkomendasikan: **{hasil_indonesia}**")
@@ -136,44 +124,34 @@ def dashboard_petani():
     st.write("### 📊 Pantauan Harga Pasar di Kabupaten Batang")
     st.info("Arahkan kursor atau sentuh diagram batang di bawah ini untuk melihat detail harga.")
     
-    # 1. SIHIR CSS UNTUK MEMAKSA MUNCULNYA SCROLL HORIZONTAL DI HP
     st.markdown("""
         <style>
-        /* Membidik langsung kotak pembungkus grafik Plotly milik Streamlit */
-        [data-testid="stPlotlyChart"] {
-            overflow-x: auto;
-        }
+        [data-testid="stPlotlyChart"] { overflow-x: auto; }
         </style>
     """, unsafe_allow_html=True)
     
-    # 2. MEMBUAT GRAFIK INTERAKTIF PLOTLY
     if not st.session_state['database_pasar'].empty:
         df = st.session_state['database_pasar']
         
-        # Kita kembalikan ke versi Vertikal (Berdiri) yang kamu suka
         fig = px.bar(df, x="Komoditas", y="Harga Beli/Kg (Rp)", color="Pasar", barmode="group",
-                     title="Perbandingan Harga Beli Komoditas Tertinggi",
-                     text_auto='.2s')
-                     
+                     title="Perbandingan Harga Beli Komoditas Tertinggi", text_auto='.2s')
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
-        
-        # PAKSA LEBAR GRAFIK JADI 900 PIKSEL (Pasti lebih lebar dari layar HP)
         fig.update_layout(width=900, height=500) 
-        
-        # MATIKAN use_container_width agar ukuran 900px tidak disusutkan oleh Streamlit!
         st.plotly_chart(fig, use_container_width=False)
         
-        with st.expander("Klik di sini untuk melihat Tabel Detail Harga"):
+        with st.expander("Klik di sini untuk melihat Tabel Detail Kontak & Harga"):
             st.dataframe(df, use_container_width=True)
     else:
         st.warning("Belum ada data pasar yang diunggah.")
 
+
 # ==========================================
-# HALAMAN 3: DASHBOARD PENJUAL (Input Pasar)
+# HALAMAN 3: DASHBOARD PENJUAL
 # ==========================================
 def dashboard_penjual():
     st.sidebar.success(f"👋 Halo, Juragan **{st.session_state['nama_user']}**!")
-    st.sidebar.write(f"📍 Lokasi: **{st.session_state['lokasi']}**")
+    st.sidebar.write(f"📍 Pasar: **{st.session_state['lokasi']}**")
+    st.sidebar.write(f"📞 Kontak WA: **{st.session_state['no_hp']}**")
     st.sidebar.markdown("---")
     if st.sidebar.button("Keluar (Logout)", type="primary"):
         st.session_state['sudah_login'] = False
@@ -199,12 +177,13 @@ def dashboard_penjual():
             data_baru = pd.DataFrame([{
                 "Pasar": st.session_state['lokasi'],
                 "Pedagang": st.session_state['nama_user'],
+                "Nomor WA": st.session_state['no_hp'], # Memasukkan Nomor HP ke tabel
                 "Komoditas": komoditas,
                 "Harga Beli/Kg (Rp)": harga,
                 "Stok Tersedia (Kg)": stok
             }])
             st.session_state['database_pasar'] = pd.concat([st.session_state['database_pasar'], data_baru], ignore_index=True)
-            st.success("✅ Data berhasil diumumkan ke seluruh petani Batang!")
+            st.success("✅ Data dan kontak Anda berhasil diumumkan ke seluruh petani Batang!")
 
     st.markdown("---")
     st.write("### 📋 Semua Permintaan Komoditas Aktif")
@@ -212,7 +191,7 @@ def dashboard_penjual():
 
 
 # ==========================================
-# PENGATUR LALU LINTAS HALAMAN (ROUTER)
+# PENGATUR LALU LINTAS HALAMAN
 # ==========================================
 if st.session_state['sudah_login'] == False:
     halaman_login()
