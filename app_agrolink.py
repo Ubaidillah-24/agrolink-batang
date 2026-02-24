@@ -98,7 +98,7 @@ def halaman_login():
 # --- BAGIAN 2: PENJELASAN APLIKASI (BACKGROUND HIJAU FULL) ---
     st.markdown("""
     <div style="background-color: #2e7d32; padding: 60px 10%; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; color: white; margin-bottom: 40px; box-shadow: inset 0 4px 6px rgba(0,0,0,0.05);">
-        <h2 style='text-align: center; color: white; margin-bottom: 30px;'>🌍 Mengapa AGRO-LINK Hadir di Batang?</h2>
+        <h2 style='text-align: center; color: white; margin-bottom: 30px;'>Mengapa AGRO-LINK Hadir di Batang?</h2>
         <div style="display: flex; gap: 20px; margin-bottom: 50px; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 250px; background-color: rgba(255,255,255,0.1); padding: 25px; border-radius: 10px; border-left: 6px solid #ff5252;">
                 <h4 style="margin-top: 0; color: #ffeb3b;">📉 Masalah Saat Ini:</h4>
@@ -206,7 +206,7 @@ def dashboard_petani():
     st.write(f"Rekomendasi tanam cerdas untuk wilayah **{st.session_state['lokasi']}**.")
     st.markdown("---")
 
-    if st.button("Analisis Lahan Sekarang 🚀", type="primary", use_container_width=True):
+    if st.button("Analisis Lahan Sekarang", type="primary", use_container_width=True):
         rekomendasi = model_agrolink.predict([[n, p, k, suhu, kelembapan, ph, hujan]])
         hasil_inggris = rekomendasi[0].lower() 
         
