@@ -57,7 +57,7 @@ def halaman_login():
             right: 50%; 
             margin-left: -50vw; 
             margin-right: -50vw; 
-            margin-top: -50px; /* Menarik navbar ke posisi paling mentok */
+            margin-top: 0px; /* 🔧 PERBAIKAN: Diubah jadi 0 agar tidak terbang ke luar layar */
             display: flex; 
             justify-content: space-between; 
             align-items: center;
