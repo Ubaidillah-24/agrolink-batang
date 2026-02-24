@@ -181,14 +181,14 @@ def dashboard_petani():
             margin-bottom: 15px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         ">
-            <span style="font-size: 18px;">👋</span> Halo, Bapak/Ibu <br><b>{st.session_state['nama_user']}</b>!
+            <span style="font-size: 18px;">👋</span> Halo, Bapak/Ibu <b>{st.session_state['nama_user']}</b>!
         </div>
     """, unsafe_allow_html=True)
     st.sidebar.write(f"📍 Lahan: **Kec. {st.session_state['lokasi']}**")
     st.sidebar.write(f"📞 Kontak: **{st.session_state['no_hp']}**")
     st.sidebar.markdown("---")
     
-    st.sidebar.header("⚙️ Sensor Lahan (Input)")
+    st.sidebar.header("Sensor Lahan (Input)")
     n = st.sidebar.number_input("Nitrogen (N)", value=90)
     p = st.sidebar.number_input("Fosfor (P)", value=42)
     k = st.sidebar.number_input("Kalium (K)", value=43)
@@ -252,7 +252,11 @@ def dashboard_petani():
 # HALAMAN 3: DASHBOARD PENJUAL
 # ==========================================
 def dashboard_penjual():
-    st.sidebar.success(f"👋 Halo, Juragan **{st.session_state['nama_user']}**!")
+    st.sidebar.markdown(f"""
+        <div style="background-color: #2e7d32; padding: 15px; border-radius: 10px; color: white; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            <span style="font-size: 18px;">👋</span> Halo, Juragan <b>{st.session_state['nama_user']}</b>!
+        </div>
+    """, unsafe_allow_html=True)
     st.sidebar.write(f"📍 Pasar: **{st.session_state['lokasi']}**")
     st.sidebar.write(f"📞 Kontak WA: **{st.session_state['no_hp']}**")
     st.sidebar.markdown("---")
@@ -289,6 +293,56 @@ def dashboard_penjual():
             st.success("✅ Data dan kontak Anda berhasil diumumkan ke seluruh petani Batang!")
 
     st.markdown("---")
+# --- SIHIR CSS UNTUK FORM HIJAU & INPUT PUTIH (REVISI WARNA HITAM) ---
+    st.markdown("""
+        <style>
+        /* 1. Menyulap Kotak Form Utama menjadi Hijau Pekat */
+        [data-testid="stForm"] {
+            background-color: #2e7d32 !important;
+            padding: 25px !important;
+            border-radius: 15px !important;
+            border: none !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+        }
+        
+        /* 2. Mengubah tulisan Label & Judul menjadi Putih */
+        [data-testid="stForm"] p, 
+        [data-testid="stForm"] h3, 
+        [data-testid="stForm"] label {
+            color: white !important;
+        }
+
+        /* 3. Memaksa Kotak Input menjadi Putih Bersih */
+        [data-testid="stForm"] div[data-baseweb="base-input"],
+        [data-testid="stForm"] div[data-baseweb="select"] > div {
+            background-color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+        }
+        
+        /* 4. MENGUBAH WARNA ANGKA & TEKS INPUT MENJADI HITAM PEKAT */
+        [data-testid="stForm"] input, 
+        [data-testid="stForm"] div[data-baseweb="select"] span {
+            color: #000000 !important; 
+            -webkit-text-fill-color: #000000 !important;
+            font-weight: 900 !important;
+        }
+        
+        /* 5. MEMUNCULKAN KEMBALI TULISAN DI TOMBOL SIMPAN (HITAM PEKAT) */
+        [data-testid="stForm"] button p {
+            color: #000000 !important; 
+            font-weight: bold !important;
+        }
+        [data-testid="stForm"] button {
+            border: 2px solid #e0e0e0 !important;
+        }
+        
+        /* 6. Mengubah warna ikon plus/minus & panah menjadi hitam */
+        [data-testid="stForm"] svg {
+            fill: #000000 !important; 
+        }
+        </style>
+    """, unsafe_allow_html=True)
     st.write("### 📋 Semua Permintaan Komoditas Aktif")
     st.dataframe(st.session_state['database_pasar'], use_container_width=True)
 
