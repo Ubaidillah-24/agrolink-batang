@@ -142,7 +142,12 @@ def dashboard_petani():
                      title="Perbandingan Harga Beli Komoditas Tertinggi Saat Ini",
                      text_auto='.2s')
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
-        st.plotly_chart(fig, use_container_width=True)
+        
+        # --- PERBAIKAN UNTUK LAYAR MOBILE ---
+        fig.update_layout(width=800) # Memaksa lebar grafik menjadi 800 piksel
+        
+        # Mengubah use_container_width menjadi False agar tidak dipaksa mengecil
+        st.plotly_chart(fig, use_container_width=False)
         
         with st.expander("Klik di sini untuk melihat Tabel Detail Harga"):
             st.dataframe(df, use_container_width=True)
