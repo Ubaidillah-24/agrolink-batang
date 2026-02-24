@@ -134,25 +134,34 @@ def dashboard_petani():
     
     st.markdown("---")
     st.write("### 📊 Pantauan Harga Pasar di Kabupaten Batang")
-    st.info("Arahkan kursor Anda ke diagram batang di bawah ini untuk melihat detail harga per pasar.")
+    st.info("Arahkan kursor atau sentuh diagram batang di bawah ini untuk melihat detail harga.")
     
-    # MEMBUAT GRAFIK INTERAKTIF PLOTLY (VERSI MOBILE-FRIENDLY)
+    # 1. SIHIR CSS UNTUK MEMAKSA MUNCULNYA SCROLL HORIZONTAL DI HP
+    st.markdown("""
+        <style>
+        /* Membidik langsung kotak pembungkus grafik Plotly milik Streamlit */
+        [data-testid="stPlotlyChart"] {
+            overflow-x: auto;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # 2. MEMBUAT GRAFIK INTERAKTIF PLOTLY
     if not st.session_state['database_pasar'].empty:
         df = st.session_state['database_pasar']
         
-        # KUNCI SIHIR: Sumbu X dan Y ditukar posisinya, dan ditambah orientation='h'
-        fig = px.bar(df, x="Harga Beli/Kg (Rp)", y="Komoditas", color="Pasar", barmode="group",
-                     orientation='h', # <-- Membuat batang memanjang ke samping
-                     title="Perbandingan Harga Beli Tertinggi",
+        # Kita kembalikan ke versi Vertikal (Berdiri) yang kamu suka
+        fig = px.bar(df, x="Komoditas", y="Harga Beli/Kg (Rp)", color="Pasar", barmode="group",
+                     title="Perbandingan Harga Beli Komoditas Tertinggi",
                      text_auto='.2s')
                      
         fig.update_traces(textfont_size=12, textangle=0, textposition="outside", cliponaxis=False)
         
-        # Menambah tinggi grafik agar batang tidak berdempetan saat datanya banyak
-        fig.update_layout(height=500) 
+        # PAKSA LEBAR GRAFIK JADI 900 PIKSEL (Pasti lebih lebar dari layar HP)
+        fig.update_layout(width=900, height=500) 
         
-        # Kita kembalikan ke True agar otomatis mulus di HP maupun Laptop
-        st.plotly_chart(fig, use_container_width=True)
+        # MATIKAN use_container_width agar ukuran 900px tidak disusutkan oleh Streamlit!
+        st.plotly_chart(fig, use_container_width=False)
         
         with st.expander("Klik di sini untuk melihat Tabel Detail Harga"):
             st.dataframe(df, use_container_width=True)
