@@ -8,8 +8,8 @@ primaryColor="#2e7d32"
 # Latar belakang utama putih bersih agar teks mudah dibaca
 backgroundColor="#ffffff"
 
-# Latar belakang sidebar putih tulang/abu-abu sangat muda
-secondaryBackgroundColor="#f4f6f8"
+# Latar belakang sidebar menjadi hijau pastel sangat lembut
+secondaryBackgroundColor="#e8f5e9"
 
 # Warna teks menjadi abu-abu gelap (lebih lembut di mata daripada hitam pekat)
 textColor="#262730"
