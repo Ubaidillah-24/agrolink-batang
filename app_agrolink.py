@@ -32,46 +32,64 @@ if 'database_pasar' not in st.session_state:
 
 
 # ==========================================
-# HALAMAN 1: FORM LOGIN
+# HALAMAN 1: LANDING PAGE & FORM LOGIN
 # ==========================================
 def halaman_login():
-    st.title("🌾 Masuk ke Ekosistem AGRO-LINK BATANG")
-    st.write("Sistem terintegrasi untuk Petani dan Pedagang Pasar di Kabupaten Batang.")
+    # --- BAGIAN 1: HERO SECTION (HEADER) ---
+    st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🌾 AGRO-LINK BATANG</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align: center;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>", unsafe_allow_html=True)
     st.markdown("---")
     
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        peran_input = st.radio("Masuk Sebagai:", ["Pilih Peran...", "👨‍🌾 Petani", "🛒 Penjual (Pedagang Pasar)"])
+    # --- BAGIAN 2: PENJELASAN APLIKASI ---
+    col_teks, col_fitur = st.columns(2)
+    
+    with col_teks:
+        st.write("### 🌍 Apa itu AGRO-LINK?")
+        st.write("AGRO-LINK BATANG adalah platform inovatif yang dirancang untuk menjembatani kesenjangan informasi antara **Petani** dan **Pedagang Pasar** di Kabupaten Batang.")
+        st.info("💡 **Misi Kami:** Menghilangkan risiko gagal panen akibat salah pilih tanaman, dan memastikan petani mendapatkan harga jual terbaik langsung dari pembeli.")
         
-        if peran_input != "Pilih Peran...":
-            if st.button("🌐 Lanjutkan dengan Akun Google", use_container_width=True):
-                st.info("Fitur Single Sign-On (SSO) Google sudah disiapkan dan akan aktif setelah integrasi Database Awan selesai.")
+    with col_fitur:
+        st.write("### ✨ Fitur Unggulan")
+        st.write("🤖 **Kecerdasan Buatan (AI):** Analisis kondisi tanah (N, P, K, pH) dan cuaca untuk merekomendasikan tanaman paling optimal.")
+        st.write("📈 **Pantauan Pasar Terbuka:** Petani bisa melihat harga beli dan kebutuhan stok dari pasar-pasar di Batang secara *real-time*.")
+        st.write("🤝 **Koneksi Langsung:** Dilengkapi kontak WhatsApp untuk transaksi langsung antara petani dan tengkulak.")
+
+    st.markdown("---")
+    
+    # --- BAGIAN 3: FORM LOGIN ---
+    st.write("<h3 style='text-align: center;'>🚀 Masuk ke Ekosistem</h3>", unsafe_allow_html=True)
+    st.write("<p style='text-align: center;'>Silakan pilih peran Anda untuk memulai.</p>", unsafe_allow_html=True)
+    
+    col_kiri, col_tengah, col_kanan = st.columns([1, 2, 1])
+    with col_tengah:
+        with st.container(border=True): # Memberikan bingkai kotak agar form login terlihat rapi
+            peran_input = st.radio("Masuk Sebagai:", ["Pilih Peran...", "👨‍🌾 Petani", "🛒 Penjual (Pedagang Pasar)"])
             
-            st.markdown("<p style='text-align: center;'>— ATAU DAFTAR MANUAL —</p>", unsafe_allow_html=True)
-            
-            nik_input = st.text_input("Nomor Induk Kependudukan (NIK)*", placeholder="Masukkan 16 digit angka", max_chars=16)
-            nama_input = st.text_input("Nama Lengkap*")
-            hp_input = st.text_input("Nomor HP / WhatsApp*", placeholder="Contoh: 081234567890") # FITUR BARU
-            
-            if peran_input == "👨‍🌾 Petani":
-                kecamatan = ["Pilih Kecamatan...", "Bandar", "Bawang", "Blado", "Batang Kota", "Gringsing", "Limpung", "Pecalungan", "Reban", "Subah", "Tersono", "Tulis", "Warungasem"]
-                lokasi_input = st.selectbox("Domisili Lahan (Kecamatan)*:", kecamatan)
-            else:
-                pasar = ["Pilih Pasar...", "Pasar Induk Kabupaten Batang", "Pasar Limpung", "Pasar Bandar", "Pasar Bawang", "Pasar Subah", "Pasar Tersono"]
-                lokasi_input = st.selectbox("Lokasi Pasar*:", pasar)
-            
-            if st.button("Masuk ke Dashboard 🚀", type="primary", use_container_width=True):
-                if len(nik_input) != 16 or not nik_input.isdigit():
-                    st.error("⚠️ Gagal: NIK harus berupa tepat 16 digit angka!")
-                elif nama_input == "" or hp_input == "" or "Pilih" in lokasi_input:
-                    st.error("⚠️ Gagal: Pastikan Nama, Nomor HP, dan Lokasi sudah terisi!")
+            if peran_input != "Pilih Peran...":
+                st.markdown("<hr>", unsafe_allow_html=True)
+                nik_input = st.text_input("Nomor Induk Kependudukan (NIK)*", placeholder="Masukkan 16 digit angka", max_chars=16)
+                nama_input = st.text_input("Nama Lengkap*")
+                hp_input = st.text_input("Nomor HP / WhatsApp*", placeholder="Contoh: 081234567890")
+                
+                if peran_input == "👨‍🌾 Petani":
+                    kecamatan = ["Pilih Kecamatan...", "Bandar", "Bawang", "Blado", "Batang Kota", "Gringsing", "Limpung", "Pecalungan", "Reban", "Subah", "Tersono", "Tulis", "Warungasem"]
+                    lokasi_input = st.selectbox("Domisili Lahan (Kecamatan)*:", kecamatan)
                 else:
-                    st.session_state['sudah_login'] = True
-                    st.session_state['nama_user'] = nama_input
-                    st.session_state['peran'] = peran_input
-                    st.session_state['lokasi'] = lokasi_input
-                    st.session_state['no_hp'] = hp_input # Menyimpan Nomor HP
-                    st.rerun()
+                    pasar = ["Pilih Pasar...", "Pasar Induk Kabupaten Batang", "Pasar Limpung", "Pasar Bandar", "Pasar Bawang", "Pasar Subah", "Pasar Tersono"]
+                    lokasi_input = st.selectbox("Lokasi Pasar*:", pasar)
+                
+                if st.button("Masuk ke Dashboard 🚀", type="primary", use_container_width=True):
+                    if len(nik_input) != 16 or not nik_input.isdigit():
+                        st.error("⚠️ Gagal: NIK harus berupa tepat 16 digit angka!")
+                    elif nama_input == "" or hp_input == "" or "Pilih" in lokasi_input:
+                        st.error("⚠️ Gagal: Pastikan Nama, Nomor HP, dan Lokasi sudah terisi!")
+                    else:
+                        st.session_state['sudah_login'] = True
+                        st.session_state['nama_user'] = nama_input
+                        st.session_state['peran'] = peran_input
+                        st.session_state['lokasi'] = lokasi_input
+                        st.session_state['no_hp'] = hp_input
+                        st.rerun()
 
 
 # ==========================================
