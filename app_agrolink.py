@@ -49,22 +49,36 @@ def halaman_login():
     bg_sawah_img = get_image_base64("bg_sawah.jpg")
 
     
-# --- BAGIAN 0: NAVIGATION BAR (REVISI: LINK PUTIH PAKSA) ---
+# --- BAGIAN 0: NAVIGATION BAR (REVISI: RESPONSIVE MOBILE MENU GARIS 3) ---
     st.markdown(f"""
     <style>
     html {{ scroll-behavior: smooth; }}
     .block-container {{ padding-top: 0rem !important; }}
     header {{ visibility: hidden !important; }}
-    /* MENGALAHKAN WARNA BIRU BAWAAN STREAMLIT */
+    .navbar {{ background-color: #2e7d32; padding: 15px 50px; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: 0px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 100; }}
+    .logo-container {{ font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px; display: flex; align-items: center; }}
+    .nav-links {{ display: flex; font-size: 15px; align-items: center; }}
     .nav-link {{ color: #ffffff !important; margin-left: 20px; font-weight: 600; text-decoration: none !important; transition: color 0.3s; }}
     .nav-link:hover {{ color: #c8e6c9 !important; text-decoration: none !important; }}
     .nav-active {{ color: #ffffff !important; margin-left: 20px; font-weight: 700; text-decoration: none !important; border-bottom: 2px solid white; padding-bottom: 2px; }}
+    #menu-toggle {{ display: none; }}
+    .hamburger {{ display: none; font-size: 28px; color: white; cursor: pointer; user-select: none; }}
+    @media screen and (max-width: 768px) {{
+    .navbar {{ padding: 15px 20px; }}
+    .hamburger {{ display: block; }}
+    .nav-links {{ display: none; flex-direction: column; width: 100%; text-align: left; padding-top: 15px; }}
+    .nav-link, .nav-active {{ margin-left: 0; margin-bottom: 15px; display: block; }}
+    .nav-active {{ border-bottom: none; border-left: 4px solid white; padding-left: 10px; padding-bottom: 0; }}
+    #menu-toggle:checked ~ .nav-links {{ display: flex; }}
+    }}
     </style>
-    <div style="background-color: #2e7d32; padding: 15px 50px; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: 0px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 100;">
-    <div style="font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px; display: flex; align-items: center;">
+    <div class="navbar">
+    <div class="logo-container">
     <img src="data:image/png;base64,{logo_img}" style="height: 45px; margin-right: 15px; background-color: white; padding: 4px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"> AGRO-LINK
     </div>
-    <div style="font-size: 15px;">
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="hamburger">&#9776;</label>
+    <div class="nav-links">
     <a href="#beranda" class="nav-active">Beranda</a>
     <a href="#tentang-kami" class="nav-link">Tentang Kami</a>
     <a href="#fitur-kami" class="nav-link">Fitur</a>
