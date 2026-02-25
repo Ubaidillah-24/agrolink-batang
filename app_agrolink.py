@@ -1,7 +1,15 @@
 import streamlit as st
+import base64
 import joblib
 import pandas as pd
 import plotly.express as px
+
+def get_image_base64(file_path):
+    try:
+        with open(file_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode('utf-8')
+    except Exception as e:
+        return "" # Jika gambar tidak ditemukan, biarkan kosong agar tidak error
 
 # 1. Mengatur Judul Tab Browser
 st.set_page_config(page_title="AGRO-LINK BATANG", page_icon="🌾", layout="wide")
@@ -35,65 +43,51 @@ if 'database_pasar' not in st.session_state:
 # HALAMAN 1: LANDING PAGE & FORM LOGIN
 # ==========================================
 def halaman_login():
-# --- BAGIAN 0: NAVIGATION BAR (NAVBAR BACKGROUND HIJAU MENTOK ATAS) ---
-    st.markdown("""
-        <style>
-        /* 1. Menghilangkan ruang kosong (padding) di paling atas layar */
-        .block-container {
-            padding-top: 0rem !important;
-        }
-        /* 2. Menghapus / menyembunyikan header putih bawaan Streamlit */
-        header {
-            visibility: hidden !important;
-        }
-        </style>
-        
-        <div style="
-            background-color: #2e7d32; 
-            padding: 15px 50px; 
-            width: 100vw; 
-            position: relative; 
-            left: 50%; 
-            right: 50%; 
-            margin-left: -50vw; 
-            margin-right: -50vw; 
-            margin-top: 0px; /* 🔧 PERBAIKAN: Diubah jadi 0 agar tidak terbang ke luar layar */
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            z-index: 100;
-        ">
-            <div style="font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px;">🌾 AGRO-LINK</div>
-            <div style="font-size: 15px;">
-                <span style="color: white; margin-left: 20px; font-weight: 700; cursor: pointer; border-bottom: 2px solid white; padding-bottom: 2px;">Beranda</span>
-                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Tentang Kami</span>
-                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Fitur</span>
-                <span style="color: #c8e6c9; margin-left: 20px; font-weight: 600; cursor: pointer;">Kontak</span>
-            </div>
-        </div>
+    # 1. Panggil semua gambar yang dibutuhkan
+    logo_img = get_image_base64("logo_agrolink.png")
+    # TAMBAHAN BARU: Panggil gambar sawah
+    bg_sawah_img = get_image_base64("bg_sawah.jpg")
+
+    
+# --- BAGIAN 0: NAVIGATION BAR (REVISI: LINK PUTIH PAKSA) ---
+    st.markdown(f"""
+    <style>
+    html {{ scroll-behavior: smooth; }}
+    .block-container {{ padding-top: 0rem !important; }}
+    header {{ visibility: hidden !important; }}
+    /* MENGALAHKAN WARNA BIRU BAWAAN STREAMLIT */
+    .nav-link {{ color: #ffffff !important; margin-left: 20px; font-weight: 600; text-decoration: none !important; transition: color 0.3s; }}
+    .nav-link:hover {{ color: #c8e6c9 !important; text-decoration: none !important; }}
+    .nav-active {{ color: #ffffff !important; margin-left: 20px; font-weight: 700; text-decoration: none !important; border-bottom: 2px solid white; padding-bottom: 2px; }}
+    </style>
+    <div style="background-color: #2e7d32; padding: 15px 50px; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: 0px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 100;">
+    <div style="font-weight: 800; font-size: 20px; color: white; letter-spacing: 1px; display: flex; align-items: center;">
+    <img src="data:image/png;base64,{logo_img}" style="height: 45px; margin-right: 15px; background-color: white; padding: 4px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"> AGRO-LINK
+    </div>
+    <div style="font-size: 15px;">
+    <a href="#beranda" class="nav-active">Beranda</a>
+    <a href="#tentang-kami" class="nav-link">Tentang Kami</a>
+    <a href="#fitur-kami" class="nav-link">Fitur</a>
+    <a href="#login-sistem" class="nav-link">Login & Kontak</a>
+    </div>
+    </div>
     """, unsafe_allow_html=True)
 
-    # --- BAGIAN 1: HERO SECTION (JUDUL BACKGROUND PUTIH) ---
-    st.markdown("""
-        <style>
-        .block-container { overflow-x: hidden; }
-        </style>
-        
-        <div style="
-            background-color: white; 
-            padding: 60px 20px 40px 20px; 
-            width: 100vw; 
-            position: relative; 
-            left: 50%; 
-            right: 50%; 
-            margin-left: -50vw; 
-            margin-right: -50vw; 
-        ">
-            <h1 style='text-align: center; color: #2e7d32; font-size: 45px; margin-bottom: 10px;'>🌾 AGRO-LINK BATANG</h1>
-            <h4 style='text-align: center; color: #555; margin-top: 0; font-weight: normal;'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>
-        </div>
+# --- BAGIAN 1: HERO SECTION (REVISI: OVERLAY LEBIH TRANSPARAN) ---
+    st.markdown(f"""
+    <div id="beranda" style="background-image: url('data:image/jpg;base64,{bg_sawah_img}'); background-size: cover; background-position: center; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;">
+    <div style="background-color: rgba(46, 125, 50, 0.50); width: 100%; height: 100%; position: absolute; top: 0; left: 0;"></div>
+    <div style="position: relative; z-index: 1; padding: 60px 20px 50px 20px; text-align: center;">
+    <div style="margin-bottom: 20px;">
+    <img src="data:image/png;base64,{logo_img}" style="height: 140px;">
+    </div>
+    <h1 style='color: white; font-size: 48px; margin-bottom: 15px; margin-top: 0; text-shadow: 0 3px 6px rgba(0,0,0,0.5);'>AGRO-LINK BATANG</h1>
+    <h4 style='color: #f1f8e9; margin-top: 0; font-weight: normal; font-size: 18px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);'>Revolusi Pertanian Digital Kabupaten Batang Berbasis Kecerdasan Buatan</h4>
+    </div>
+    </div>
     """, unsafe_allow_html=True)
+    
+    # (Sisa kode Bagian 2 Penjelasan Aplikasi dst biarkan tetap sama)
 
 # --- BAGIAN 2: PENJELASAN APLIKASI (BACKGROUND HIJAU FULL) ---
     st.markdown("""
